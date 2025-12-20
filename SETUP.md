@@ -4,6 +4,26 @@
 - Node.js (v16 or higher)
 - npm or yarn
 
+## Important Notes
+⚠️ **Before you start:**
+- Ensure you have Node.js v16 or higher installed
+- Make sure port 3000 is available (or change it in `vite.config.js`)
+- For production deployment, use `npm run build` and serve the `dist` folder
+- The application uses local storage for data persistence (no backend required)
+- Admin credentials are for demo purposes only - change them in production
+
+🚀 **Quick Start:**
+- Run `npm install` to install dependencies
+- Run `npm run dev` to start the development server
+- Open `http://localhost:3000` in your browser
+
+📝 **Key Features:**
+- Complete application form with validation
+- Real-time application tracking
+- Admin dashboard with analytics
+- PDF generation for applications
+- Responsive design for all devices
+
 ## Installation Steps
 
 1. **Install Dependencies**
