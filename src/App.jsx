@@ -8,12 +8,14 @@ import About from './components/About'
 import Contact from './components/Contact'
 import Footer from './components/Footer'
 import ChatBot from './components/ChatBot'
+import Admission from './components/Admission'
 import ApplicationForm from './components/ApplicationForm'
 import MultiStepForm from './components/MultiStepForm'
 import TrackApplication from './components/TrackApplication'
 import Dashboard from './components/Dashboard'
 import AdminDashboard from './components/AdminDashboard'
 import Login from './components/Login'
+import RegistrationForm from './components/RegistrationForm'
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
@@ -130,9 +132,40 @@ function App() {
                 className="flex-1 flex flex-col"
               >
                 <Header />
+                <main className="flex-1">
+                  <Admission />
+                </main>
+                <Footer />
+              </motion.div>
+            } />
+            <Route path="/register" element={
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3 }}
+                className="flex-1 flex flex-col"
+              >
+                <Header />
+                <main className="flex-1">
+                  <RegistrationForm />
+                </main>
+                <Footer />
+              </motion.div>
+            } />
+            <Route path="/apply" element={
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3 }}
+                className="flex-1 flex flex-col"
+              >
+                <Header />
                 <main className="flex-1 container mx-auto px-4 py-8">
                   <MultiStepForm onSuccess={handleApplicationSuccess} />
                 </main>
+                <Footer />
               </motion.div>
             } />
             <Route path="/simple" element={
@@ -189,4 +222,3 @@ function App() {
 }
 
 export default App
-

@@ -1,101 +1,90 @@
 import { Link, useLocation } from 'react-router-dom'
-import { motion } from 'framer-motion'
-import { GraduationCap, Menu, X, Phone, Mail, MapPin, User, FileText, BarChart3, Bell } from 'lucide-react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { GraduationCap, Menu, X, Phone, User, FileText, BarChart3, Home } from 'lucide-react'
 import DarkModeToggle from './DarkModeToggle'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 export default function Header() {
   const location = useLocation()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20)
+    }
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
 
   const navigationItems = [
-    { path: '/', label: 'Home', icon: GraduationCap },
+    { path: '/', label: 'Home', icon: Home },
     { path: '/about', label: 'About', icon: User },
     { path: '/admission', label: 'Admission', icon: FileText },
     { path: '/gallery', label: 'Gallery', icon: BarChart3 },
     { path: '/contact', label: 'Contact', icon: Phone },
   ]
 
-  const quickLinks = [
-    { path: '/track', label: 'Track Application', icon: FileText },
-    { path: '/admin', label: 'Admin Portal', icon: BarChart3 },
-  ]
-
   return (
     <motion.header
-      initial={{ y: -100, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.6, type: 'spring' }}
-      className="bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl shadow-2xl border-b border-gray-200/50 dark:border-gray-700/50 sticky top-0 z-50"
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        scrolled ? 'py-3' : 'py-5'
+      }`}
     >
-      {/* Top Bar */}
-      <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-2">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between text-sm">
-            <div className="flex items-center gap-6">
-              <div className="flex items-center gap-2">
-                <Phone className="w-4 h-4" />
-                <span>+1 (555) 123-4567</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Mail className="w-4 h-4" />
-                <span>info@apnacollege.edu</span>
-              </div>
-            </div>
-            <div className="flex items-center gap-4">
-              <Link to="/track" className="hover:text-yellow-300 transition-colors">
-                Track Application
-              </Link>
-              <span className="text-white/50">|</span>
-              <Link to="/admin" className="hover:text-yellow-300 transition-colors">
-                Admin Portal
-              </Link>
-            </div>
-          </div>
-        </div>
-      </div>
-      {/* Main Header */}
-      <div className="container mx-auto px-4 py-4">
-        <div className="flex items-center justify-between">
-          {/* Logo */}
-          <motion.div
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="flex items-center gap-4"
-          >
-            <div className="relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-2xl blur-lg opacity-75"></div>
-              <div className="relative bg-gradient-to-r from-indigo-600 to-purple-600 p-4 rounded-2xl shadow-lg">
-                <GraduationCap className="w-10 h-10 text-white" />
+      <div className="container mx-auto px-4">
+        <div className={`
+          max-w-6xl mx-auto relative flex items-center justify-between px-4 py-3 rounded-2xl transition-all duration-300
+          ${scrolled
+            ? 'bg-white/70 dark:bg-gray-900/70 backdrop-blur-xl shadow-lg border border-gray-200/50 dark:border-gray-700/50'
+            : 'bg-white/30 dark:bg-gray-900/30 backdrop-blur-md border border-white/20 dark:border-gray-700/30'
+          }
+        `}>
+          {/* Logo Section */}
+          <Link to="/" className="group">
+            <div className="flex items-center gap-3">
+              <motion.div 
+                whileHover={{ rotate: 10, scale: 1.1 }}
+                className="relative"
+              >
+                <div className="absolute inset-0 bg-indigo-500 blur-lg opacity-40 rounded-full group-hover:opacity-60 transition-opacity"></div>
+                <div className="relative bg-gradient-to-br from-indigo-600 to-purple-600 p-2.5 rounded-xl shadow-lg text-white">
+                  <GraduationCap className="w-6 h-6" />
+                </div>
+              </motion.div>
+              <div>
+                <h1 className="text-xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                  Apna College
+                </h1>
               </div>
             </div>
-            <div>
-              <h1 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-                Apna College
-              </h1>
-              <p className="text-gray-600 dark:text-gray-400 text-sm font-medium">
-                Excellence in Education Since 2010
-              </p>
-            </div>
-          </motion.div>
+          </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center gap-8">
+          <nav className="hidden xl:flex items-center gap-1">
             {navigationItems.map((item) => {
               const isActive = location.pathname === item.path
               return (
                 <Link key={item.path} to={item.path}>
                   <motion.div
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    className={`flex items-center gap-2 px-4 py-2 rounded-xl font-semibold transition-all duration-300 ${
+                    initial="initial"
+                    whileHover="hover"
+                    className={`relative flex items-center gap-2 px-4 py-2 rounded-full font-semibold transition-all duration-300 ${
                       isActive
-                        ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg'
-                        : 'text-gray-700 dark:text-gray-300 hover:bg-indigo-50 dark:hover:bg-gray-800 hover:text-indigo-600'
+                        ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/20 shadow-sm'
+                        : 'text-gray-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-gray-100/50 dark:hover:bg-gray-800/50'
                     }`}
                   >
-                    <item.icon className="w-5 h-5" />
-                    {item.label}
+                    <motion.div
+                      variants={{
+                        initial: { rotate: 0 },
+                        hover: { rotate: -15, scale: 1.1, y: -2 }
+                      }}
+                    >
+                      <item.icon className="w-4 h-4" />
+                    </motion.div>
+                    <span>{item.label}</span>
                   </motion.div>
                 </Link>
               )
@@ -106,88 +95,77 @@ export default function Header() {
           <div className="flex items-center gap-4">
             <DarkModeToggle />
 
-            {/* Quick Actions */}
             <div className="hidden md:flex items-center gap-2">
-              <Link
-                to="/track"
-                className="bg-gradient-to-r from-green-500 to-emerald-600 text-white px-4 py-2 rounded-lg font-semibold hover:shadow-lg transition-all duration-300 hover:scale-105 flex items-center gap-2"
-              >
-                <FileText className="w-4 h-4" />
-                Track
-              </Link>
-              <Link
-                to="/admission"
-                className="bg-gradient-to-r from-orange-500 to-red-600 text-white px-6 py-2 rounded-lg font-semibold hover:shadow-lg transition-all duration-300 hover:scale-105"
-              >
-                Apply Now
+              <Link to="/register">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="relative overflow-hidden bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-6 py-2.5 rounded-full font-semibold shadow-lg shadow-indigo-500/30 group"
+                >
+                  <span className="relative z-10 flex items-center gap-2">
+                    Apply Now
+                  </span>
+                  <motion.div
+                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent"
+                    initial={{ x: '-100%' }}
+                    animate={{ x: '200%' }}
+                    transition={{ repeat: Infinity, duration: 2, ease: "linear", repeatDelay: 1 }}
+                  />
+                </motion.button>
               </Link>
             </div>
 
             {/* Mobile Menu Button */}
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="lg:hidden p-2 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+              className="xl:hidden p-2.5 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors text-gray-700 dark:text-gray-300"
             >
               {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
           </div>
         </div>
-      </div>
 
-      {/* Mobile Navigation */}
-      {isMenuOpen && (
-        <motion.div
-          initial={{ opacity: 0, height: 0 }}
-          animate={{ opacity: 1, height: 'auto' }}
-          exit={{ opacity: 0, height: 0 }}
-          className="lg:hidden bg-gray-50 dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700"
-        >
-          <div className="container mx-auto px-4 py-4">
-            <nav className="space-y-2">
-              {navigationItems.map((item) => {
-                const isActive = location.pathname === item.path
-                return (
-                  <Link key={item.path} to={item.path} onClick={() => setIsMenuOpen(false)}>
-                    <motion.div
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      className={`flex items-center gap-3 px-4 py-3 rounded-xl font-semibold transition-all duration-300 ${
-                        isActive
-                          ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg'
-                          : 'text-gray-700 dark:text-gray-300 hover:bg-white dark:hover:bg-gray-700'
-                      }`}
-                    >
-                      <item.icon className="w-5 h-5" />
-                      {item.label}
-                    </motion.div>
-                  </Link>
-                )
-              })}
-
-              {/* Mobile Quick Actions */}
-              <div className="pt-4 border-t border-gray-200 dark:border-gray-600 space-y-2">
-                <Link
-                  to="/track"
-                  onClick={() => setIsMenuOpen(false)}
-                  className="flex items-center gap-3 w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white px-4 py-3 rounded-xl font-semibold"
-                >
-                  <FileText className="w-5 h-5" />
-                  Track Application
-                </Link>
-                <Link
-                  to="/admission"
-                  onClick={() => setIsMenuOpen(false)}
-                  className="flex items-center gap-3 w-full bg-gradient-to-r from-orange-500 to-red-600 text-white px-4 py-3 rounded-xl font-semibold"
-                >
-                  <FileText className="w-5 h-5" />
-                  Apply for Admission
+        {/* Mobile Navigation Overlay */}
+        <AnimatePresence>
+          {isMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              className="xl:hidden absolute top-full left-0 right-0 mx-4 mt-2 p-4 bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-gray-200/50 dark:border-gray-700/50 overflow-hidden"
+            >
+              <div className="space-y-2">
+                {navigationItems.map((item) => {
+                  const isActive = location.pathname === item.path
+                  return (
+                    <Link key={item.path} to={item.path} onClick={() => setIsMenuOpen(false)}>
+                      <motion.div
+                        whileTap={{ scale: 0.98 }}
+                        className={`flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-colors ${
+                          isActive
+                            ? 'bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400'
+                            : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800'
+                        }`}
+                      >
+                        <item.icon className="w-5 h-5" />
+                        {item.label}
+                      </motion.div>
+                    </Link>
+                  )
+                })}
+                
+                <div className="h-px bg-gray-100 dark:bg-gray-800 my-6" />
+                
+                <Link to="/register" onClick={() => setIsMenuOpen(false)}>
+                  <div className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white text-center py-3 rounded-xl font-semibold shadow-lg">
+                    Apply Now
+                  </div>
                 </Link>
               </div>
-            </nav>
-          </div>
-        </motion.div>
-      )}
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
     </motion.header>
   )
 }
-

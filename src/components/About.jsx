@@ -48,7 +48,7 @@ export default function About() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 dark:from-gray-900 dark:to-gray-800">
       {/* Hero Section */}
-      <section className="relative py-20 overflow-hidden">
+      <section className="relative pt-32 pb-20 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 opacity-10"></div>
         <div className="absolute inset-0">
           <div className="absolute top-20 left-10 w-72 h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob"></div>
@@ -169,7 +169,7 @@ export default function About() {
             </p>
           </motion.div>
           <div className="relative">
-            <div className="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-gradient-to-b from-indigo-500 to-purple-500 rounded-full"></div>
+            <div className="absolute left-4 md:left-1/2 transform -translate-x-1/2 w-1 h-full bg-gradient-to-b from-indigo-500 to-purple-500 rounded-full"></div>
             <div className="space-y-12">
               {timeline.map((item, index) => (
                 <motion.div
@@ -177,9 +177,9 @@ export default function About() {
                   initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.6, delay: index * 0.1 }}
-                  className={`flex items-center ${index % 2 === 0 ? 'justify-start' : 'justify-end'}`}
+                  className={`flex items-center ${index % 2 === 0 ? 'md:justify-start' : 'md:justify-end'}`}
                 >
-                  <div className={`w-full md:w-1/2 ${index % 2 === 0 ? 'pr-8 md:pr-16' : 'pl-8 md:pl-16'}`}>
+                  <div className={`w-full md:w-1/2 ${index % 2 === 0 ? 'pl-12 md:pl-0 md:pr-16' : 'pl-12 md:pl-16'}`}>
                     <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
                       <div className="flex items-center mb-3">
                         <Calendar className="w-5 h-5 text-primary-600 mr-2" />
@@ -189,7 +189,7 @@ export default function About() {
                       <p className="text-gray-600 dark:text-gray-300">{item.event}</p>
                     </div>
                   </div>
-                  <div className="absolute left-1/2 transform -translate-x-1/2 w-4 h-4 bg-primary-600 rounded-full border-4 border-white dark:border-gray-800"></div>
+                  <div className="absolute left-4 md:left-1/2 transform -translate-x-1/2 w-4 h-4 bg-primary-600 rounded-full border-4 border-white dark:border-gray-800"></div>
                 </motion.div>
               ))}
             </div>
