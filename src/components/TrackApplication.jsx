@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { Search, CheckCircle, Clock, AlertCircle, FileCheck, QrCode } from 'lucide-react'
+import { Search, CheckCircle, Clock, AlertCircle, FileCheck, QrCode, Printer } from 'lucide-react'
 import { getApplication } from '../utils/storage'
+import { generateApplicationPDF } from '../utils/pdfGenerator'
 import QRCodeModal from './QRCodeModal'
 import ApplicationChecklist from './ApplicationChecklist'
 
@@ -77,6 +78,13 @@ export default function TrackApplication() {
         return 'status-reviewing'
       default:
         return 'status-pending'
+    }
+  }
+
+  const handlePrint = () => {
+    if (application) {
+      const doc = generateApplicationPDF(application)
+      doc.save(`Application_${application.id}.pdf`)
     }
   }
 
@@ -212,6 +220,15 @@ export default function TrackApplication() {
                   <QrCode className="w-5 h-5" />
                   Generate QR Code
                 </motion.button>
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={handlePrint}
+                  className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-700 transition-colors"
+                >
+                  <Printer className="w-5 h-5" />
+                  Print Application
+                </motion.button>
               </div>
             </motion.div>
           </div>
@@ -227,4 +244,3 @@ export default function TrackApplication() {
     </motion.div>
   )
 }
-

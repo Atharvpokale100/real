@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { User, Mail, Phone, Calendar, BookOpen, Send, CheckCircle, FileUp, Trash2, School, Award, AlertTriangle } from 'lucide-react'
+import { User, Mail, Phone, Calendar, BookOpen, Send, CheckCircle, FileUp, Trash2, School, Award, AlertTriangle, ShieldCheck, Copy } from 'lucide-react'
 import { saveApplication, generateAppId } from '../utils/storage'
+import hash from 'object-hash'
 
 const Stepper = ({ steps, currentStep }) => (
   <div className="flex justify-between items-start mb-8 overflow-x-auto pb-2">
@@ -86,6 +87,7 @@ export default function RegistrationForm() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [applicationId, setApplicationId] = useState(null)
+  const [digitalSignature, setDigitalSignature] = useState(null)
   const [errors, setErrors] = useState({})
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false)
   const [isDragging, setIsDragging] = useState(false)
@@ -189,15 +191,21 @@ export default function RegistrationForm() {
 
     const id = generateAppId()
     const { files, ...restData } = formData
+    
+    // Generate a cryptographic hash of the application data for integrity
+    const signature = hash({ ...restData, timestamp: new Date().toISOString() }, { algorithm: 'sha1' })
+    
     const application = {
       id,
       ...restData,
+      digitalSignature: signature,
       status: 'Pending',
       dateApplied: new Date().toISOString(),
       documents: files.map(f => ({ name: f.name, size: f.size }))
     }
     saveApplication(application)
     setApplicationId(id)
+    setDigitalSignature(signature)
 
     setIsSubmitting(false)
     setIsSubmitted(true)
@@ -328,6 +336,19 @@ export default function RegistrationForm() {
               <h3 className="text-2xl font-bold text-gray-800 dark:text-white mb-2">Registration Successful!</h3>
               <p className="text-lg font-bold text-indigo-600 dark:text-indigo-400 mb-2">Application ID: {applicationId}</p>
               <p className="text-gray-600 dark:text-gray-300 mb-6">Thank you for registering. Please save your Application ID to track your admission status.</p>
+              
+              <div className="bg-gray-50 dark:bg-gray-900/50 p-4 rounded-xl mb-6 max-w-md mx-auto border border-gray-200 dark:border-gray-700">
+                <div className="flex items-center justify-center gap-2 text-gray-500 dark:text-gray-400 mb-2">
+                  <ShieldCheck className="w-4 h-4" />
+                  <span className="text-xs font-semibold uppercase tracking-wider">Digital Signature</span>
+                </div>
+                <code className="block text-xs text-gray-600 dark:text-gray-300 break-all font-mono bg-white dark:bg-gray-800 p-2 rounded border border-gray-200 dark:border-gray-700">
+                  {digitalSignature}
+                </code>
+                <p className="text-xs text-gray-400 mt-2">This secure hash proves the integrity of your application.</p>
+              </div>
+
+              <p className="text-gray-600 dark:text-gray-300 mb-6">Thank you for registering. Please save your Application ID and Digital Signature.</p>
               <button onClick={() => { setIsSubmitted(false); setCurrentStep(1); }} className="text-indigo-600 hover:text-indigo-700 font-medium">Register another student</button>
             </motion.div>
           ) : (

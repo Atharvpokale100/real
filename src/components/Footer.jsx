@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { Facebook, Twitter, Instagram, Youtube, Mail, Phone, MapPin, GraduationCap } from 'lucide-react'
+import Chatbot from './Chatbot'
 
 export default function Footer() {
   const currentYear = new Date().getFullYear()
@@ -11,6 +12,7 @@ export default function Footer() {
     { name: 'Gallery', path: '/gallery' },
     { name: 'Contact', path: '/contact' },
     { name: 'Admission', path: '/admission' },
+    { name: 'Track Application', path: '/track' },
   ]
 
   const programs = [
@@ -183,6 +185,7 @@ export default function Footer() {
           </div>
         </motion.div>
       </div>
+      <Chatbot />
     </footer>
   )
 }

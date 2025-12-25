@@ -1,6 +1,6 @@
 import { Link, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { GraduationCap, Menu, X, Phone, User, FileText, BarChart3, Home } from 'lucide-react'
+import { GraduationCap, Menu, X, Phone, User, FileText, BarChart3, Home, ShieldCheck, Search } from 'lucide-react'
 import DarkModeToggle from './DarkModeToggle'
 import { useState, useEffect } from 'react'
 
@@ -21,6 +21,7 @@ export default function Header() {
     { path: '/', label: 'Home', icon: Home },
     { path: '/about', label: 'About', icon: User },
     { path: '/admission', label: 'Admission', icon: FileText },
+    { path: '/track', label: 'Track', icon: Search },
     { path: '/gallery', label: 'Gallery', icon: BarChart3 },
     { path: '/contact', label: 'Contact', icon: Phone },
   ]
@@ -29,22 +30,22 @@ export default function Header() {
     <motion.header
       initial={{ y: -100 }}
       animate={{ y: 0 }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled ? 'py-3' : 'py-5'
-      }`}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'py-0 md:py-3' : 'py-0 md:py-5'
+        }`}
     >
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto px-0 md:px-4">
         <div className={`
-          max-w-6xl mx-auto relative flex items-center justify-between px-4 py-3 rounded-2xl transition-all duration-300
+          relative flex items-center justify-between px-4 py-3 transition-all duration-300
+          w-full md:max-w-6xl md:mx-auto md:rounded-2xl
           ${scrolled
-            ? 'bg-white/70 dark:bg-gray-900/70 backdrop-blur-xl shadow-lg border border-gray-200/50 dark:border-gray-700/50'
-            : 'bg-white/30 dark:bg-gray-900/30 backdrop-blur-md border border-white/20 dark:border-gray-700/30'
+            ? 'bg-white dark:bg-gray-900 md:bg-white/70 md:dark:bg-gray-900/70 md:backdrop-blur-md shadow-lg border-b md:border border-gray-200/50 dark:border-gray-700/50'
+            : 'bg-white dark:bg-gray-900 md:bg-white/70 md:dark:bg-gray-900/70 md:backdrop-blur-sm border-b md:border border-white/20 dark:border-gray-700/30'
           }
         `}>
           {/* Logo Section */}
           <Link to="/" className="group">
             <div className="flex items-center gap-3">
-              <motion.div 
+              <motion.div
                 whileHover={{ rotate: 10, scale: 1.1 }}
                 className="relative"
               >
@@ -70,11 +71,10 @@ export default function Header() {
                   <motion.div
                     initial="initial"
                     whileHover="hover"
-                    className={`relative flex items-center gap-2 px-4 py-2 rounded-full font-semibold transition-all duration-300 ${
-                      isActive
+                    className={`relative flex items-center gap-2 px-4 py-2 rounded-full font-semibold transition-all duration-300 ${isActive
                         ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/20 shadow-sm'
                         : 'text-gray-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-gray-100/50 dark:hover:bg-gray-800/50'
-                    }`}
+                      }`}
                   >
                     <motion.div
                       variants={{
@@ -94,6 +94,11 @@ export default function Header() {
           {/* Right Side Actions */}
           <div className="flex items-center gap-4">
             <DarkModeToggle />
+
+            {/* Admin Link */}
+            <Link to="/admin" className="hidden md:flex items-center justify-center w-10 h-10 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-indigo-100 dark:hover:bg-indigo-900/30 text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all" title="Admin Portal">
+              <ShieldCheck className="w-5 h-5" />
+            </Link>
 
             <div className="hidden md:flex items-center gap-2">
               <Link to="/register">
@@ -141,11 +146,10 @@ export default function Header() {
                     <Link key={item.path} to={item.path} onClick={() => setIsMenuOpen(false)}>
                       <motion.div
                         whileTap={{ scale: 0.98 }}
-                        className={`flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-colors ${
-                          isActive
+                        className={`flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-colors ${isActive
                             ? 'bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400'
                             : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800'
-                        }`}
+                          }`}
                       >
                         <item.icon className="w-5 h-5" />
                         {item.label}
@@ -153,9 +157,16 @@ export default function Header() {
                     </Link>
                   )
                 })}
-                
+
                 <div className="h-px bg-gray-100 dark:bg-gray-800 my-6" />
-                
+
+                <Link to="/admin" onClick={() => setIsMenuOpen(false)}>
+                  <div className="flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                    <ShieldCheck className="w-5 h-5" />
+                    Admin Portal
+                  </div>
+                </Link>
+
                 <Link to="/register" onClick={() => setIsMenuOpen(false)}>
                   <div className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white text-center py-3 rounded-xl font-semibold shadow-lg">
                     Apply Now

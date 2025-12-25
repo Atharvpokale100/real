@@ -1,59 +1,30 @@
-// Utility functions for localStorage management
+const STORAGE_KEY = 'admission_applications'
 
-export const generateAppId = () => {
-  return 'APP' + Date.now().toString(36).toUpperCase() + Math.random().toString(36).substr(2, 5).toUpperCase()
+export const saveApplication = (data) => {
+  const applications = getAllApplications()
+  applications.push(data)
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(applications))
 }
 
-export const saveApplication = (application) => {
-  const applications = getApplications()
-  applications.push(application)
-  localStorage.setItem('applications', JSON.stringify(applications))
-  return application
+export const getAllApplications = () => {
+  const data = localStorage.getItem(STORAGE_KEY)
+  return data ? JSON.parse(data) : []
 }
 
-export const getApplications = () => {
-  const stored = localStorage.getItem('applications')
-  return stored ? JSON.parse(stored) : []
-}
-
-export const getApplication = (appId, email) => {
-  const applications = getApplications()
-  return applications.find(
-    (app) => app.id.toUpperCase() === appId.toUpperCase() && app.email.toLowerCase() === email.toLowerCase()
+export const getApplication = (id, email) => {
+  const applications = getAllApplications()
+  return applications.find(app => 
+    app.id === id && app.email.toLowerCase() === email.toLowerCase()
   )
 }
 
-export const updateApplicationStatus = (appId, newStatus) => {
-  const applications = getApplications()
-  const index = applications.findIndex((app) => app.id === appId)
+export const updateApplicationStatus = (id, status) => {
+  const applications = getAllApplications()
+  const index = applications.findIndex(app => app.id === id)
   if (index !== -1) {
-    applications[index].status = newStatus
-    applications[index].dateUpdated = new Date().toISOString()
-    localStorage.setItem('applications', JSON.stringify(applications))
-    return applications[index]
+    applications[index].status = status
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(applications))
+    return true
   }
-  return null
+  return false
 }
-
-export const filterApplications = (applications, searchTerm, statusFilter, courseFilter) => {
-  return applications.filter((app) => {
-    const matchesSearch =
-      !searchTerm ||
-      app.fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      app.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      app.id.toUpperCase().includes(searchTerm.toUpperCase())
-
-    const matchesStatus = !statusFilter || app.status === statusFilter
-    const matchesCourse = !courseFilter || app.course === courseFilter
-
-    return matchesSearch && matchesStatus && matchesCourse
-  })
-}
-
-export const deleteApplication = (appId) => {
-  const applications = getApplications()
-  const filtered = applications.filter((app) => app.id !== appId)
-  localStorage.setItem('applications', JSON.stringify(filtered))
-  return filtered
-}
-

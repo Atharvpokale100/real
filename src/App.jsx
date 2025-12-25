@@ -28,6 +28,7 @@ function App() {
       setIsAuthenticated(true)
       setUser(JSON.parse(userData))
     }
+
   }, [])
 
   const handleLogin = (userData) => {
@@ -50,6 +51,26 @@ function App() {
 
   return (
     <Router>
+      <style>{`
+        html {
+          scroll-behavior: smooth;
+        }
+        ::-webkit-scrollbar {
+          width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+          background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+          background-color: rgba(156, 163, 175, 0.5);
+          border-radius: 20px;
+          border: 3px solid transparent;
+          background-clip: content-box;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+          background-color: rgba(107, 114, 128, 0.8);
+        }
+      `}</style>
       <div className="min-h-screen flex flex-col">
         <AnimatePresence mode="wait">
           <Routes>
@@ -87,7 +108,7 @@ function App() {
                 className="flex-1 flex flex-col"
               >
                 <Header />
-                <main className="flex-1 container mx-auto px-4 py-8">
+                <main className="flex-1">
                   <Gallery />
                 </main>
                 <Footer />
@@ -117,7 +138,7 @@ function App() {
                 className="flex-1 flex flex-col"
               >
                 <Header />
-                <main className="flex-1 container mx-auto px-4 py-8">
+                <main className="flex-1">
                   <Contact />
                 </main>
                 <Footer />
